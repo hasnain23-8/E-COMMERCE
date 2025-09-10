@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional E-Commerce Store</title>
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f4f9; }
+
+    /* Navbar */
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    header h1 { font-size: 24px; }
+    .search-bar {
+      flex: 1;
+      margin: 0 20px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+    }
+    .cart-icon {
+      cursor: pointer;
+      font-size: 20px;
+      position: relative;
+    }
+    #cart-count {
+      background: crimson;
+      padding: 2px 7px;
+      border-radius: 50%;
+      font-size: 14px;
+      color: #fff;
+      position: absolute;
+      top: -8px;
+      right: -10px;
+    }
+
+    /* Category Filter */
+    .filter {
+      padding: 15px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .filter button {
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      background: #2c3e50;
+      color: #fff;
+      transition: 0.3s;
+    }
+    .filter button:hover { background: #34495e; }
+
+    /* Products Grid */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .product {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .product:hover { transform: translateY(-5px); }
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product h3 { margin: 10px 0; font-size: 18px; }
+    .product p { color: #444; font-weight: bold; margin-bottom: 8px; }
+    .product button {
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .product button:hover { background: #2ecc71; }
+
+    /* Cart */
+    .cart {
+      position: fixed;
+      top: 0;
+      right: -350px;
+      width: 320px;
+      background: #fff;
+      height: 100%;
+      box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+    .cart.active { right: 0; }
+    .cart h2 { margin-bottom: 15px; }
+    .cart ul { list-style: none; padding: 0; }
+    .cart li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .cart li input {
+      width: 40px;
+      text-align: center;
+      margin-left: 10px;
+    }
+    .cart .total {
+      font-weight: bold;
+      margin: 15px 0;
+      text-align: right;
+    }
+    .cart button.checkout {
+      width: 100%;
+      background: #2980b9;
+      padding: 12px;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .cart button.checkout:hover { background: #3498db; }
+
+    /* Responsive */
+    @media(max-width:600px){
+      header { flex-direction: column; align-items: flex-start; }
+      .search-bar { margin: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Pro E-Store</h1>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search products..." onkeyup="searchProducts()">
+    </div>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 <span id="cart-count">0</span>
+    </div>
+  </header>
+
+  <!-- Filter -->
+  <div class="filter">
+    <button onclick="filterProducts('all')">All</button>
+    <button onclick="filterProducts('electronics')">Electronics</button>
+    <button onclick="filterProducts('clothing')">Clothing</button>
+    <button onclick="filterProducts('accessories')">Accessories</button>
+  </div>
+
+  <!-- Products -->
+  <section class="products" id="product-list">
+    <div class="product" data-category="electronics">
+      <img src="https://propakistani.pk/price/wp-content/uploads/2025/03/xiaomi-poco-x7-pro-300x300.jpg" alt="Phone">
+      <h3>Smartphone</h3>
+      <p>$299</p>
+      <button onclick="addToCart('Smartphone', 299)">Add to Cart</button>
+    </div>
+    <div class="product" data-category="electronics">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCFwtb69uIZsYDm4u1sBKguVxUcaWX9Gb2EQ&s" alt="Laptop">
+      <h3>Laptop</h3>
+      <p>$799</p>
+      <button onclick="addToCart('Laptop', 799)">Add to Cart</button>
+    </div>
+    <div class="product" data-category="clothing">
+      <img src="https://www.inkfactory.pk/wp-content/uploads/2019/10/Pakistan-Day-T-Shirt-0001-600x600.jpg" alt="Shirt">
+      <h3>Shirt</h3>
+      <p>$25</p>
+      <button onclick="addToCart('Shirt', 25)">Add to Cart</button>
+    </div>
+    <div class="product" data-category="accessories">
+      <img src="https://i0.wp.com/watchcentre.pk/wp-content/uploads/2022/04/curren-8356-black-stainless-steel-mens-watch.jpg?fit=800%2C800&ssl=1" alt="Watch">
+      <h3>Watch</h3>
+      <p>$120</p>
+      <button onclick="addToCart('Watch', 120)">Add to Cart</button>
+    </div>
+  </section>
+
+  <!-- Cart -->
+  <div class="cart" id="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <div class="total">Total: $<span id="cart-total">0</span></div>
+    <button class="checkout" onclick="checkout()">Checkout</button>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addToCart(product, price) {
+      let existing = cart.find(item => item.product === product);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ product, price, qty: 1 });
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      let cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price * item.qty;
+        cartItems.innerHTML += `
+          <li>
+            ${item.product} - $${item.price}
+            <input type="number" min="1" value="${item.qty}" onchange="changeQty(${index}, this.value)">
+            <button onclick="removeItem(${index})">❌</button>
+          </li>
+        `;
+      });
+
+      document.getElementById("cart-total").innerText = total;
+      document.getElementById("cart-count").innerText = cart.reduce((sum, i) => sum + i.qty, 0);
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function changeQty(index, qty) {
+      cart[index].qty = parseInt(qty);
+      updateCart();
+    }
+
+    function toggleCart() {
+      document.getElementById("cart").classList.toggle("active");
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+      } else {
+        alert("Thanks for shopping! Total: $" + document.getElementById("cart-total").innerText);
+        cart = [];
+        updateCart();
+      }
+    }
+
+    // Filter
+    function filterProducts(category) {
+      let products = document.querySelectorAll(".product");
+      products.forEach(p => {
+        if (category === "all" || p.dataset.category === category) {
+          p.style.display = "block";
+        } else {
+          p.style.display = "none";
+        }
+      });
+    }
+
+    // Search
+    function searchProducts() {
+      let query = document.getElementById("search").value.toLowerCase();
+      let products = document.querySelectorAll(".product");
+      products.forEach(p => {
+        let name = p.querySelector("h3").innerText.toLowerCase();
+        p.style.display = name.includes(query) ? "block" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
